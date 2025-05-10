@@ -1,26 +1,90 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location_tracking/models/user_location_marker.dart';
 import '../services/location_service.dart';
 
 class LocationTrackingMapProvider with ChangeNotifier {
   final LocationService _locationService = LocationService();
 
   Position? _currentPosition;
-  double _bearing = 0.0;
+  final List<UserLocationMarker> _userLocations;
+  final double _trackDistance;
+  bool _locationTrackActive;
+  StreamSubscription<Position>? _currentPositionStream;
+  GoogleMapController? mapController;
 
   Position? get currentPosition => _currentPosition;
-  double get bearing => _bearing;
+
+  bool get locationTrackActive => _locationTrackActive;
+
+  List<UserLocationMarker> get userLocations => _userLocations;
+
+  LocationTrackingMapProvider({required List<UserLocationMarker> locationMarkers, bool locationTrackActive = true, double trackDistance = 50})
+    : _userLocations = locationMarkers,
+      _locationTrackActive = locationTrackActive,
+      _trackDistance = trackDistance {
+    getInitialLocation();
+    changeLocationTrackActivation(locationTrackActive: locationTrackActive);
+  }
 
   void startLocationUpdates() {
-    _locationService.getPositionStream().listen((position) {
+    if (_currentPositionStream != null) {
+      _currentPositionStream!.cancel();
+    }
+    _currentPositionStream = _locationService.getPositionStream().listen((position) {
       _currentPosition = position;
-      _bearing = position.heading;
-      notifyListeners();
+      mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 16)));
+      if (!_locationTrackActive) return;
+      UserLocationMarker? newMarker;
+      if (_userLocations.isNotEmpty) {
+        var lastPosition = _userLocations.last;
+        final distance = Geolocator.distanceBetween(lastPosition.x, lastPosition.y, position.latitude, position.longitude);
+
+        if (distance >= _trackDistance) {
+          newMarker = UserLocationMarker(id: lastPosition.id + 1, x: position.latitude, y: position.longitude, date: DateTime.now());
+        }
+      } else {
+        newMarker = UserLocationMarker(id: 1, x: position.latitude, y: position.longitude, date: DateTime.now());
+      }
+      if (newMarker != null) {
+        _userLocations.add(newMarker);
+        notifyListeners();
+      }
     });
   }
 
   Future<void> getInitialLocation() async {
     _currentPosition = await _locationService.getCurrentPosition();
+    notifyListeners();
+  }
+
+  void changeLocationTrackActivation({bool? locationTrackActive}) {
+    _locationTrackActive = locationTrackActive ?? !_locationTrackActive;
+    startLocationUpdates();
+    notifyListeners();
+  }
+
+  Set<Marker> createMarkers() {
+    return _userLocations.map((marker) {
+      return Marker(markerId: MarkerId(marker.id.toString()), position: LatLng(marker.x, marker.y), infoWindow: InfoWindow(title: '${marker.id}', snippet: '${marker.date}'));
+    }).toSet();
+  }
+
+  @override
+  void dispose() {
+    _currentPositionStream?.cancel();
+    super.dispose();
+  }
+
+  void setMapController(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  Future clearPositions() async {
+    userLocations.clear();
     notifyListeners();
   }
 }

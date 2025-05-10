@@ -16,9 +16,7 @@ class _LocationTrackingMapState extends State<LocationTrackingMap> {
   @override
   void initState() {
     super.initState();
-    _locationProvider = LocationTrackingMapProvider();
-    _locationProvider.getInitialLocation();
-    _locationProvider.startLocationUpdates();
+    _locationProvider = LocationTrackingMapProvider(locationMarkers: []);
   }
 
   @override
@@ -34,17 +32,38 @@ class _LocationTrackingMapState extends State<LocationTrackingMap> {
       child: Consumer<LocationTrackingMapProvider>(
         builder: (context, locationProvider, child) {
           final position = locationProvider.currentPosition;
-          if (position == null) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          final currentLatLng = LatLng(position.latitude, position.longitude);
+          final currentLatLng = LatLng(position?.latitude ?? 40.9707867, position?.longitude ?? 29.0910574);
 
-          return GoogleMap(
-            initialCameraPosition: CameraPosition(target: currentLatLng, zoom: 16, bearing: locationProvider.bearing),
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
-            rotateGesturesEnabled: true,
-            compassEnabled: true,
+          return SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: GoogleMap(
+                    initialCameraPosition: CameraPosition(target: currentLatLng, zoom: 16),
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
+                    rotateGesturesEnabled: true,
+                    compassEnabled: true,
+                    onMapCreated: (GoogleMapController controller) {
+                      locationProvider.setMapController(controller);
+                    },
+                    markers: locationProvider.createMarkers(),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(onPressed: locationProvider.clearPositions, child: const Text("Konumları Temizle")),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: locationProvider.changeLocationTrackActivation,
+                      style: ElevatedButton.styleFrom(backgroundColor: locationProvider.locationTrackActive ? Colors.red : Colors.blue),
+                      child: Text(locationProvider.locationTrackActive ? "Takibi Durdur" : "Takibi Başlat"),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           );
         },
       ),
