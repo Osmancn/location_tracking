@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location_tracking/models/user_location_marker.dart';
 import 'package:location_tracking/utilities/dataaccess/user_location_dataaccess.dart';
+import '../../main.dart';
 import '../services/location_service.dart';
 import '../services/preference_service.dart';
 
@@ -12,8 +13,7 @@ class LocationTrackingMapProvider with ChangeNotifier {
   final LocationService _locationService = LocationService();
 
   Position? _currentPosition;
-  final List<UserLocationMarker> _userLocations;
-  final double _trackDistance;
+  List<UserLocationMarker> _userLocations;
   bool _locationTrackActive;
   StreamSubscription<Position>? _currentPositionStream;
   GoogleMapController? mapController;
@@ -24,10 +24,9 @@ class LocationTrackingMapProvider with ChangeNotifier {
 
   List<UserLocationMarker> get userLocations => _userLocations;
 
-  LocationTrackingMapProvider({required List<UserLocationMarker> locationMarkers, bool locationTrackActive = true, double trackDistance = 50})
+  LocationTrackingMapProvider({required List<UserLocationMarker> locationMarkers, bool locationTrackActive = true})
     : _userLocations = locationMarkers,
-      _locationTrackActive = locationTrackActive,
-      _trackDistance = trackDistance {
+      _locationTrackActive = locationTrackActive {
     getInitialLocation();
     changeLocationTrackActivation(locationTrackActive: locationTrackActive);
   }
@@ -39,23 +38,10 @@ class LocationTrackingMapProvider with ChangeNotifier {
     _currentPositionStream = _locationService.getPositionStream().listen((position) {
       _currentPosition = position;
       mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 16)));
-      if (!_locationTrackActive) return;
-      UserLocationMarker? newMarker;
-      if (_userLocations.isNotEmpty) {
-        var lastPosition = _userLocations.last;
-        final distance = Geolocator.distanceBetween(lastPosition.x, lastPosition.y, position.latitude, position.longitude);
-
-        if (distance >= _trackDistance) {
-          newMarker = UserLocationMarker(id: lastPosition.id + 1, x: position.latitude, y: position.longitude, date: DateTime.now());
-        }
-      } else {
-        newMarker = UserLocationMarker(id: 1, x: position.latitude, y: position.longitude, date: DateTime.now());
-      }
-      if (newMarker != null) {
-        UserLocationDataaccess().setNewLocation(newMarker);
-        _userLocations.add(newMarker);
+      UserLocationDataaccess().getLocations().then((locations) {
+        _userLocations = locations;
         notifyListeners();
-      }
+      });
     });
   }
 
@@ -68,6 +54,7 @@ class LocationTrackingMapProvider with ChangeNotifier {
     _locationTrackActive = locationTrackActive ?? !_locationTrackActive;
     PreferenceService.set(PreferenceKeys.trackActivation, _locationTrackActive.toString());
     startLocationUpdates();
+    startStopLocationTracking(_locationTrackActive);
     notifyListeners();
   }
 
@@ -93,4 +80,5 @@ class LocationTrackingMapProvider with ChangeNotifier {
     UserLocationDataaccess().clearLocations();
     notifyListeners();
   }
+
 }

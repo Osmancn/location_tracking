@@ -5,21 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9016ca68-bc76-4294-9d3b-27548c3208e7" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/db/LocationTracking.db" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/pages/home_page/bloc/home_page_bloc.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/pages/home_page/bloc/home_page_event.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/pages/home_page/bloc/home_page_state.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/utilities/dataaccess/user_location_dataaccess.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/utilities/services/database_service.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/utilities/services/preference_service.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/AppDelegate.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/AppDelegate.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/Info.plist" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/home_page/home_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/utilities/dataaccess/user_location_dataaccess.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utilities/dataaccess/user_location_dataaccess.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/utilities/providers/location_tracking_map_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utilities/providers/location_tracking_map_provider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/utilities/services/location_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utilities/services/location_service.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/utilities/widgets/location_tracking_map.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utilities/widgets/location_tracking_map.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/utilities/services/database_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utilities/services/database_service.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

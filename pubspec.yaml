@@ -42,6 +42,7 @@ dependencies:
   path: ^1.9.1
   flutter_bloc: ^9.1.1
   shared_preferences: ^2.5.3
+  background_location_tracker: ^1.5.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

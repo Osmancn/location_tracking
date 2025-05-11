@@ -14,7 +14,7 @@ class DatabaseService {
     return _databaseService!;
   }
 
-  DatabaseService._initiliaze() {}
+  DatabaseService._initiliaze();
 
   Future<Database> getDatabase() async {
     if (_database != null) return _database!;
