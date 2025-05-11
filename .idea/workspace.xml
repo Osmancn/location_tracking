@@ -5,15 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9016ca68-bc76-4294-9d3b-27548c3208e7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/models/user_location_marker.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/models/user_location.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/models/user_location_marker.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/models/user_location.g.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/home_page/bloc/home_page_state.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/home_page/bloc/home_page_state.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/utilities/dataaccess/user_location_dataaccess.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utilities/dataaccess/user_location_dataaccess.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/utilities/providers/location_tracking_map_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utilities/providers/location_tracking_map_provider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/utilities/services/location_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utilities/services/location_service.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/utilities/widgets/location_tracking_map.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utilities/widgets/location_tracking_map.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
