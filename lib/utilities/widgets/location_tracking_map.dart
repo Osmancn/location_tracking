@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location_tracking/models/user_location_marker.dart';
 import 'package:location_tracking/utilities/providers/location_tracking_map_provider.dart';
 import 'package:provider/provider.dart';
 
 class LocationTrackingMap extends StatefulWidget {
-  const LocationTrackingMap({super.key});
+  final List<UserLocationMarker> userLocations;
+  final bool locationTrackActive;
+
+  const LocationTrackingMap({required this.userLocations, required this.locationTrackActive, super.key});
 
   @override
   State<LocationTrackingMap> createState() => _LocationTrackingMapState();
@@ -16,7 +20,7 @@ class _LocationTrackingMapState extends State<LocationTrackingMap> {
   @override
   void initState() {
     super.initState();
-    _locationProvider = LocationTrackingMapProvider(locationMarkers: []);
+    _locationProvider = LocationTrackingMapProvider(locationMarkers: widget.userLocations, locationTrackActive: widget.locationTrackActive);
   }
 
   @override

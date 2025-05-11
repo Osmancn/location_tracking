@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location_tracking/models/user_location_marker.dart';
+import 'package:location_tracking/utilities/dataaccess/user_location_dataaccess.dart';
 import '../services/location_service.dart';
+import '../services/preference_service.dart';
 
 class LocationTrackingMapProvider with ChangeNotifier {
   final LocationService _locationService = LocationService();
@@ -50,6 +52,7 @@ class LocationTrackingMapProvider with ChangeNotifier {
         newMarker = UserLocationMarker(id: 1, x: position.latitude, y: position.longitude, date: DateTime.now());
       }
       if (newMarker != null) {
+        UserLocationDataaccess().setNewLocation(newMarker);
         _userLocations.add(newMarker);
         notifyListeners();
       }
@@ -63,6 +66,7 @@ class LocationTrackingMapProvider with ChangeNotifier {
 
   void changeLocationTrackActivation({bool? locationTrackActive}) {
     _locationTrackActive = locationTrackActive ?? !_locationTrackActive;
+    PreferenceService.set(PreferenceKeys.trackActivation, _locationTrackActive.toString());
     startLocationUpdates();
     notifyListeners();
   }
@@ -76,6 +80,7 @@ class LocationTrackingMapProvider with ChangeNotifier {
   @override
   void dispose() {
     _currentPositionStream?.cancel();
+    mapController?.dispose();
     super.dispose();
   }
 
@@ -85,6 +90,7 @@ class LocationTrackingMapProvider with ChangeNotifier {
 
   Future clearPositions() async {
     userLocations.clear();
+    UserLocationDataaccess().clearLocations();
     notifyListeners();
   }
 }
