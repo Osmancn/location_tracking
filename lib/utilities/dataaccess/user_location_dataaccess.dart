@@ -1,6 +1,6 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:location_tracking/main.dart';
-import 'package:location_tracking/models/user_location_marker.dart';
+import 'package:location_tracking/models/user_location.dart';
 import 'package:location_tracking/utilities/services/database_service.dart';
 
 class UserLocationDataaccess {
@@ -13,14 +13,14 @@ class UserLocationDataaccess {
 
   UserLocationDataaccess._initiliaze();
 
-  Future<List<UserLocationMarker>> getLocations() async {
+  Future<List<UserLocation>> getLocations() async {
     var database = await DatabaseService().getDatabase();
     var userLocationTable = await database.query("UserLocation");
     var userLocationTableQuery = userLocationTable.where((element) => true);
-    return List<UserLocationMarker>.from(userLocationTableQuery.map((x) => UserLocationMarker.fromJson(x)));
+    return List<UserLocation>.from(userLocationTableQuery.map((x) => UserLocation.fromJson(x)));
   }
 
-  Future setNewLocation(UserLocationMarker newLocation) async {
+  Future setNewLocation(UserLocation newLocation) async {
     var database = await DatabaseService().getDatabase();
     await database.insert("UserLocation", newLocation.toJson());
   }
@@ -30,12 +30,12 @@ class UserLocationDataaccess {
     await database.delete("UserLocation");
   }
 
-  Future setNewLocationWithDbCheck(UserLocationMarker newLocation) async {
+  Future setNewLocationWithDbCheck(UserLocation newLocation) async {
     var database = await DatabaseService().getDatabase();
     var userLocationTable = await database.query("UserLocation");
-    UserLocationMarker? lastLocation;
+    UserLocation? lastLocation;
     try {
-      lastLocation = UserLocationMarker.fromJson(userLocationTable.last);
+      lastLocation = UserLocation.fromJson(userLocationTable.last);
       // ignore: empty_catches
     } catch (e) {}
     if (lastLocation == null) {

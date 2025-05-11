@@ -1,13 +1,13 @@
 import 'package:background_location_tracker/background_location_tracker.dart';
 import 'package:flutter/material.dart';
-import 'package:location_tracking/models/user_location_marker.dart';
+import 'package:location_tracking/models/user_location.dart';
 import 'package:location_tracking/pages/home_page/home_page.dart';
 import 'package:location_tracking/utilities/dataaccess/user_location_dataaccess.dart';
 
 @pragma('vm:entry-point')
 void backgroundCallback() {
   BackgroundLocationTrackerManager.handleBackgroundUpdated((data) async {
-    UserLocationDataaccess().setNewLocationWithDbCheck(UserLocationMarker(id: 0, x: data.lat, y: data.lon, date: DateTime.now()));
+    UserLocationDataaccess().setNewLocationWithDbCheck(UserLocation(id: 0, x: data.lat, y: data.lon, date: DateTime.now()));
   });
 }
 

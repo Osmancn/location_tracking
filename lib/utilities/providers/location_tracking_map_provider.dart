@@ -3,32 +3,34 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location_tracking/models/user_location_marker.dart';
+import 'package:location_tracking/models/user_location.dart';
 import 'package:location_tracking/utilities/dataaccess/user_location_dataaccess.dart';
 import '../../main.dart';
 import '../services/location_service.dart';
 import '../services/preference_service.dart';
 
 class LocationTrackingMapProvider with ChangeNotifier {
-  final LocationService _locationService = LocationService();
 
-  Position? _currentPosition;
-  List<UserLocationMarker> _userLocations;
-  bool _locationTrackActive;
+  final LocationService _locationService = LocationService();
+  GoogleMapController? _mapController;
   StreamSubscription<Position>? _currentPositionStream;
-  GoogleMapController? mapController;
+  Position? _currentPosition;
+  List<UserLocation> _userLocations;
+  bool _locationTrackActive;
 
   Position? get currentPosition => _currentPosition;
-
   bool get locationTrackActive => _locationTrackActive;
+  List<UserLocation> get userLocations => _userLocations;
 
-  List<UserLocationMarker> get userLocations => _userLocations;
-
-  LocationTrackingMapProvider({required List<UserLocationMarker> locationMarkers, bool locationTrackActive = true})
+  LocationTrackingMapProvider({required List<UserLocation> locationMarkers, bool locationTrackActive = true})
     : _userLocations = locationMarkers,
       _locationTrackActive = locationTrackActive {
     getInitialLocation();
     changeLocationTrackActivation(locationTrackActive: locationTrackActive);
+  }
+
+  void setMapController(GoogleMapController controller) {
+    _mapController = controller;
   }
 
   void startLocationUpdates() {
@@ -37,7 +39,7 @@ class LocationTrackingMapProvider with ChangeNotifier {
     }
     _currentPositionStream = _locationService.getPositionStream().listen((position) {
       _currentPosition = position;
-      mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 16)));
+      _mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 16)));
       UserLocationDataaccess().getLocations().then((locations) {
         _userLocations = locations;
         notifyListeners();
@@ -64,21 +66,16 @@ class LocationTrackingMapProvider with ChangeNotifier {
     }).toSet();
   }
 
-  @override
-  void dispose() {
-    _currentPositionStream?.cancel();
-    mapController?.dispose();
-    super.dispose();
-  }
-
-  void setMapController(GoogleMapController controller) {
-    mapController = controller;
-  }
-
   Future clearPositions() async {
     userLocations.clear();
     UserLocationDataaccess().clearLocations();
     notifyListeners();
   }
 
+  @override
+  void dispose() {
+    _currentPositionStream?.cancel();
+    _mapController?.dispose();
+    super.dispose();
+  }
 }
